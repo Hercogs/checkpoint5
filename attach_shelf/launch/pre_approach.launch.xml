@@ -1,0 +1,16 @@
+<launch>
+
+    <arg name = "obstacle" default="0.3" description="Set distance to obstacle"/>
+    <arg name = "degrees" default="-90" description="Set degrres to turn"/>
+
+    <node
+        pkg="attach_shelf"
+        exec="pre_approach_node"
+        name="pre_approach_node_name">
+
+        <param name="obstacle" value="$(var obstacle)"/>
+        <param name="degrees" value="$(var degrees)"/>
+
+    </node>
+
+</launch>
