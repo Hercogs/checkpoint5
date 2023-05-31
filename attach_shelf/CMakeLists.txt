@@ -10,6 +10,9 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(attach_shelf_interfaces REQUIRED)
+find_package(tf2_ros REQUIRED)
+#find_package(rosidl_default_generators REQUIRED)
 
 
 if(BUILD_TESTING)
@@ -23,18 +26,38 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+
+#rosidl_generate_interfaces(${PROJECT_NAME}
+#	"srv/GoToLoading.srv"
+#)
+
+
 add_executable(pre_approach_node src/pre_approach.cpp)
 ament_target_dependencies(pre_approach_node rclcpp sensor_msgs geometry_msgs)
 
+add_executable(pre_approach_v2_node src/pre_approach_v2.cpp)
+ament_target_dependencies(pre_approach_v2_node rclcpp sensor_msgs geometry_msgs attach_shelf_interfaces)
+
+add_executable(approach_service_server_node src/approach_service_server.cpp)
+ament_target_dependencies(approach_service_server_node rclcpp sensor_msgs geometry_msgs attach_shelf_interfaces tf2_ros)
+
+
 install(TARGETS
 	pre_approach_node
+	pre_approach_v2_node
+	approach_service_server_node
 
 	DESTINATION
 	lib/${PROJECT_NAME}
 )
 
+#rosidl_target_interfaces(approach_service_server_node
+#	${PROJECT_NAME} "rosidl_typesupport_cpp")
+
+
 install(DIRECTORY
 	launch
+	rviz
 	
 	DESTINATION
 	share/${PROJECT_NAME}
